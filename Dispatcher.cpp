@@ -313,24 +313,22 @@ void Dispatcher::dispatch(Device & d) {
 void Dispatcher::handleResult(Device & d) {
 	++d.m_round;
 
-	for (auto i = 40 - 1; i > m_clScoreMax; --i) {
+	for (auto i = m_clScoreMax; i < 40; i++) {
 		result & r = d.m_memResult[i];
 
-		if (r.found > 0 && i >= d.m_clScoreMax) {
-			d.m_clScoreMax = i;
+		if (r.found > 0) {
+			d.m_clScoreMax = i + 1;
 			CLMemory<cl_uchar>::setKernelArg(d.m_kernelScore, 4, d.m_clScoreMax);
 
 			std::lock_guard<std::mutex> lock(m_mutex);
-			if (i >= m_clScoreMax) {
-				m_clScoreMax = i;
+			m_clScoreMax = i + 1;
 
-				if (m_clScoreQuit && i >= m_clScoreQuit) {
-					m_quit = true;
-				}
-
-				printResult(d.m_clSeed, d.m_round, r, i, timeStart, m_mode);
+			if (m_clScoreMax >= 40) {
+				m_quit = true;
 			}
 
+			printResult(d.m_clSeed, d.m_round, r, i, timeStart, m_mode);
+		} else {
 			break;
 		}
 	}

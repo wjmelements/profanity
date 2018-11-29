@@ -153,8 +153,7 @@ int main(int argc, char * * argv) {
 		bool bModeLeadingRange = false;
 		bool bModeRange = false;
 		bool bModeMirror = false;
-		int rangeMin = 0;
-		int rangeMax = 0;
+		cl_uint rangeMin = 0;
 		std::vector<size_t> vDeviceSkipIndex;
 		size_t worksizeLocal = 64;
 		size_t worksizeMax = 1048576;
@@ -174,7 +173,6 @@ int main(int argc, char * * argv) {
 		argp.addSwitch('7', "range", bModeRange);
 		argp.addSwitch('8', "mirror", bModeMirror);
 		argp.addSwitch('m', "min", rangeMin);
-		argp.addSwitch('M', "max", rangeMax);
 		argp.addMultiSwitch('s', "skip", vDeviceSkipIndex);
 		argp.addSwitch('w', "work", worksizeLocal);
 		argp.addSwitch('W', "work-max", worksizeMax);
@@ -202,14 +200,12 @@ int main(int argc, char * * argv) {
 			mode = Mode::letters();
 		} else if (bModeNumbers) {
 			mode = Mode::numbers();
+		} else if (!strModeLeading.empty() && rangeMin) {
+			mode = Mode::minLeading(strModeLeading.front(), rangeMin);
 		} else if (!strModeLeading.empty()) {
 			mode = Mode::leading(strModeLeading.front());
 		} else if (!strModeMatching.empty()) {
 			mode = Mode::matching(strModeMatching);
-		} else if (bModeLeadingRange) {
-			mode = Mode::leadingRange(rangeMin, rangeMax);
-		} else if (bModeRange) {
-			mode = Mode::range(rangeMin, rangeMax);
 		} else if(bModeMirror) {
 			mode = Mode::mirror();
 		} else {
@@ -309,7 +305,6 @@ int main(int argc, char * * argv) {
 		std::cout << "  Building program..." << std::flush;
 		const std::string strBuildOptions = "-D PROFANITY_INVERSE_SIZE=" + toString(inverseSize);
 		if (printResult(clBuildProgram(clProgram, vDevices.size(), vDevices.data(), strBuildOptions.c_str(), NULL, NULL))) {
-#ifdef PROFANITY_DEBUG
 			std::cout << std::endl;
 			std::cout << "build log:" << std::endl;
 
@@ -320,7 +315,6 @@ int main(int argc, char * * argv) {
 
 			std::cout << szLog << std::endl;
 			delete[] szLog;
-#endif
 			return 1;
 		}
 

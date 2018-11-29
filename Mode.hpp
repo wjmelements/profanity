@@ -23,6 +23,7 @@ class Mode {
 		static Mode matching(const std::string strHex);
 		static Mode range(const cl_uchar min, const cl_uchar max);
 		static Mode leading(const char charLeading);
+		static Mode minLeading(const char charLeading, cl_uchar min);
 		static Mode leadingRange(const cl_uchar min, const cl_uchar max);
 		static Mode mirror();
 

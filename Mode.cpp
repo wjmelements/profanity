@@ -47,13 +47,21 @@ Mode Mode::matching(const std::string strHex) {
 	return r;
 }
 
+const std::string hex = "0123456789abcdef";
 Mode Mode::leading(const char charLeading) {
-	const std::string hex = "0123456789abcdef";
-
 	Mode r;
 	r.name = "leading";
 	r.kernel = "profanity_score_leading";
 	r.data1[0] = static_cast<cl_uchar>(hex.find(charLeading));
+	return r;
+}
+
+Mode Mode::minLeading(const char charLeading, cl_uchar min) {
+	Mode r;
+	r.name = "minLeading";
+	r.kernel = "profanity_minscore_leading";
+	r.data1[0] = static_cast<cl_uchar>(hex.find(charLeading));
+	r.data1[1] = min;
 	return r;
 }
 
