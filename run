@@ -1,0 +1,3 @@
+#!/bin/bash
+make
+./profanity.x64 --leading 0 --min 10 --contract | tee tenners.out
