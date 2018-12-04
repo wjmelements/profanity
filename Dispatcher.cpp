@@ -377,7 +377,7 @@ void Dispatcher::printSpeed() {
 			++i;
 		}
 
-		std::cout << "Total: " << formatSpeed(speedTotal) << " -" << strGPUs << "\r" << std::flush;
+		std::cerr << "Total: " << formatSpeed(speedTotal) << " -" << strGPUs << "\r" << std::flush;
 		m_countPrint = 0;
 	}
 }
