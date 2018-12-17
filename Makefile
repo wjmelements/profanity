@@ -13,6 +13,9 @@ else
 endif
 
 all: $(SOURCES) $(EXECUTABLE)
+inverse: chi.o rhopi.o
+chitest: chi.o
+rhopitest: rhopi.o
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
