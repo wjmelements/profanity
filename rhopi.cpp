@@ -23,7 +23,6 @@ void keccakRhoPi(ethhash &hash) {
 	for (int i = 0; i < 24; i++) {
 		int j = piln[i];
 		bc = hash.q[j];
-		
 		hash.q[j] = rotatel(t, rotc[i]);
 		t = bc;
 	}
