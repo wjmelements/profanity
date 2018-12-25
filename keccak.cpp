@@ -2,6 +2,7 @@
 #include "rhopi.h"
 #include "chi.h"
 #include "iota.h"
+#include "test.h"
 
 #include <assert.h>
 #include <iostream>
@@ -18,16 +19,47 @@ void keccak(ethhash &hash) {
 		keccakRhoPi(hash);
 		// Chi
 		keccakChi(hash);
-		// IOTA
+		// Iota
 		hash.q[0] ^= rndc[r];
 	}
+}
+
+void inverseKeccak(ethhash &hash) {
+	for (int r = 24; r --> 0;) {
+		// Iota
+		hash.q[0] ^= rndc[r];
+		// Chi
+		inverseChi(hash);
+		// Rho Pi
+		inverseRhoPi(hash);
+		// Theta
+		inverseTheta(hash);
+	}
+	hash.d[33] ^= 0x80000000;
+}
+
+int test_random() {
+	ethhash hash1, hash2;
+	for (uint32_t i = 0; i < 0x40; i++) {
+		randomize(hash1);
+		assignHash(hash2, hash1);
+		assertEqual(hash1, hash2);
+		keccak(hash1);
+		inverseKeccak(hash1);
+		assertEqual(hash1, hash2);
+		inverseKeccak(hash1);
+		keccak(hash1);
+		assertEqual(hash1, hash2);
+	}
+	return 0;
 }
 
 int test_empty() {
 	ethhash hash;
 	bzero(&hash, sizeof(hash));
-	hash.b[0] ^= 0x01; // length 0
+	assertZero(hash);
 
+	hash.b[0] ^= 0x01; // length 0
 	keccak(hash);
 
 	// 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470
@@ -67,10 +99,19 @@ int test_empty() {
 	for (int i = 0; i < 32; i++) {
 		assert(hash.b[i] == expected.b[i]);
 	}
+
+	inverseKeccak(hash);
+	hash.b[0] ^= 0x01; // length 0
+
+	assertZero(hash);
+
 	return 0;
 }
 
 int main() {
+	initThetaInverse();
+	cout << "Initialized" << endl;
 	test_empty();
+	test_random();
 	return 0;
 }

@@ -16,11 +16,16 @@ int main() {
 		assert(rotater(rotater(rot, i), 64-i) == rot);
 	}
 	ethhash hash1, hash2;
-	randomize(hash1);
-	assignHash(hash2, hash1);
-	keccakRhoPi(hash1);
-	inverseRhoPi(hash1);
-	assertEqual(hash1, hash2);
+	for (uint32_t i = 0; i < 0x4000; i++) {
+		randomize(hash1);
+		assignHash(hash2, hash1);
+		keccakRhoPi(hash1);
+		inverseRhoPi(hash1);
+		assertEqual(hash1, hash2);
+		inverseRhoPi(hash1);
+		keccakRhoPi(hash1);
+		assertEqual(hash1, hash2);
+	}
 	for (int i = 0; i < 32; i++) {
 		for (int j = 0; j < i; j++) {
 			keccakRhoPi(hash1);

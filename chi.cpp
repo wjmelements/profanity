@@ -59,11 +59,11 @@ void inverseChi(ethhash &hash) {
 			chin |= ((hash.q[j+4] & (1llu << shift)) >> shift) << 4llu;
 			assert(chin < 32);
 			uint8_t invChi = chi[chin];
-			bc[0] |= (invChi & 1) << shift;
-			bc[1] |= (invChi & 2) >> 1 << shift;
-			bc[2] |= (invChi & 4) >> 2 << shift;
-			bc[3] |= (invChi & 8) >> 3 << shift;
-			bc[4] |= (invChi & 16) >> 4 << shift;
+			bc[0] |= (invChi & 1llu) << shift;
+			bc[1] |= (invChi & 2llu) >> 1 << shift;
+			bc[2] |= (invChi & 4llu) >> 2 << shift;
+			bc[3] |= (invChi & 8llu) >> 3 << shift;
+			bc[4] |= (invChi & 16llu) >> 4 << shift;
 		}
 		hash.q[j] = bc[0];
 		hash.q[j+1] = bc[1];

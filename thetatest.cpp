@@ -43,15 +43,13 @@ int test_keccakBitTheta() {
 		assertEqual(hash1, hash2);
 		keccakBitTheta(hash1);
 		keccakTheta(hash2);
-		printHash(hash1);
-		printHash(hash2);
 		assertEqual(hash1, hash2);
 	}
 	return 0;
 }
 
 int test_inverseTheta() {
-	for (uint32_t i = 0; i < 0x4000; i++) {
+	for (uint32_t i = 0; i < 0x40; i++) {
 		ethhash hash1, hash2;
 		randomize(hash1);
 		assignHash(hash2, hash1);
@@ -62,6 +60,15 @@ int test_inverseTheta() {
 		inverseTheta(hash1);
 		keccakTheta(hash1);
 		assertEqual(hash1, hash2);
+		for (int i = 2; i < 40; i++) {
+			for (int j = 0; j < i; j++) {
+				inverseTheta(hash1);
+			}
+			for (int j = 0; j < i; j++) {
+				keccakTheta(hash1);
+			}
+			assertEqual(hash1, hash2);
+		}
 	}
 	return 0;
 }
@@ -69,10 +76,9 @@ int test_inverseTheta() {
 int main() {
 	//test_bitTheta();
 	//test_keccakBitTheta();
-	//create_preimages();
 	initThetaInverse();
 	cout << "Initialized" << endl;
 	//test_inverseBitTheta();
-	//test_inverseTheta();
+	test_inverseTheta();
 	return 0;
 }

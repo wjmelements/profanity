@@ -1,8 +1,46 @@
 #include "chi.h"
+#include "test.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <iostream>
+using std::cout;
+using std::endl;
 
-#include "test.h"
+void test_chi() {
+	ethhash hash1, hash2;
+	for (int i = 0; i < 0x100; i++) {
+		randomize(hash1);
+		hash1.q[0] <<= 8;
+		assignHash(hash2, hash1);
+		for (int j = 0; j < i; j++) {
+			keccakChi(hash1);
+		}
+		for (int j = 0; j < i; j++) {
+			inverseChi(hash1);
+		}
+		assertEqual(hash1, hash2);
+		for (int j = 0; j < i; j++) {
+			inverseChi(hash1);
+		}
+		for (int j = 0; j < i; j++) {
+			keccakChi(hash1);
+		}
+		assertEqual(hash1, hash2);
+	}
+	for (int i = 0; i < 0x4000; i++) {
+		randomize(hash1);
+		assignHash(hash2, hash1);
+		assertEqual(hash1, hash2);
+		for (int j = 0; j < 24; j++) {
+			inverseChi(hash1);
+		}
+		for (int j = 0; j < 24; j++) {
+			keccakChi(hash1);
+		}
+		assertEqual(hash1, hash2);
+	}
+}
+
 int main() {
 	//bitset<5> zero;
 	//chi_depth(0, zero);
@@ -16,6 +54,13 @@ int main() {
 		}
 		for (int j = 0; j < i; j++) {
 			inverseChi(hash1);
+		}
+		assertEqual(hash1, hash2);
+		for (int j = 0; j < i; j++) {
+			inverseChi(hash1);
+		}
+		for (int j = 0; j < i; j++) {
+			keccakChi(hash1);
 		}
 		assertEqual(hash1, hash2);
 	}
@@ -38,6 +83,8 @@ int main() {
 		}
 		assertEqual(hash1, hash2);
 	}
+
+	test_chi();
 
 	return 0;
 }
