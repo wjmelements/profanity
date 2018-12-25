@@ -13,7 +13,7 @@ else
 	LDFLAGS=-s -lOpenCL
 endif
 
-all: $(SOURCES) $(EXECUTABLE)
+all: $(SOURCES) $(EXECUTABLE) keccak mkbitthetainverse chitest rhopitest thetatest
 chitest: chi.o chitest.o
 rhopitest: rhopi.o rhopitest.o
 thetatest: theta.o thetatest.o
