@@ -18,6 +18,7 @@ chitest: chi.o chitest.o
 rhopitest: rhopi.o rhopitest.o
 thetatest: theta.o thetatest.o
 keccak: keccak.o chi.o rhopi.o theta.o
+mkbitthetainverse: mkbitthetainverse.o theta.o
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
