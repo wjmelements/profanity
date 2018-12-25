@@ -95,41 +95,10 @@ slice_t bitTheta(slice_t slice, parity_t nextParity) {
 #include <assert.h>
 using std::vector;
 
-static uint8_t preimageIndices[NUM_IMAGES];
-uint32_t preimages[NUM_IMAGES][32];
+static uint32_t preimages[NUM_IMAGES][32];
 
-int create_preimages() {
-	bzero(&preimageIndices, sizeof(preimageIndices));
-	bzero(&preimages, sizeof(preimages));
-	//memset(&preimages, 0xff, sizeof(preimages));
-	for (uint32_t i = 0; i < NUM_IMAGES; i++) {
-		const slice_t slice(i);
-		const slice_t theta = bitTheta(slice);
-		for (uint8_t j = 0; j < 32; j++) {
-			const parity_t parity(j);
-			const uint32_t output = applyParity(theta, parity).to_ulong();
-			uint32_t preimage = i | (j << 25);
-			assert(preimageIndices[output] < 32);
-			preimages[output][preimageIndices[output]++] = preimage;
-			/*
-			for (int k = 0; k < 33; k++) {
-				assert(k < 32);
-				if (preimages[output][k] == 0xffffffffffffffff) {
-					preimages[output][k] = preimage;
-					break;
-				}
-			}
-			*/
-		}
-	}
-	//write(1, preimages, sizeof(preimages));
-	for (uint32_t i = 0; i < NUM_IMAGES; i++) {
-		if (write(1, &preimages[i], sizeof(preimages[i])) == -1) {
-			perror("write");
-			return -1;
-		}
-	}
-	return 0;
+uint32_t getBitThetaPreimage(uint32_t inputSlice, uint32_t adjParity) {
+	return preimages[inputSlice][adjParity];
 }
 
 // this takes ~3 seconds

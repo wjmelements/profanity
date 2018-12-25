@@ -9,11 +9,7 @@ using std::hex;
 using std::cout;
 using std::endl;
 
-int test_empty() {
-	ethhash hash;
-	bzero(&hash, sizeof(hash));
-
-	hash.b[0] ^= 0x01; // length 0
+void keccak(ethhash &hash) {
 	hash.d[33] ^= 0x80000000;
 	for (int r = 0; r < 24; r++) {
 		// Theta
@@ -25,6 +21,15 @@ int test_empty() {
 		// IOTA
 		hash.q[0] ^= rndc[r];
 	}
+}
+
+int test_empty() {
+	ethhash hash;
+	bzero(&hash, sizeof(hash));
+	hash.b[0] ^= 0x01; // length 0
+
+	keccak(hash);
+
 	// 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470
 	ethhash expected;
 	expected.b[0] = 0xc5;

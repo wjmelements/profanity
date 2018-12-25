@@ -25,7 +25,7 @@ int test_bitTheta() {
 int test_inverseBitTheta() {
 	for (uint32_t i = 0; i < NUM_IMAGES; i++) {
 		for (uint32_t j = 0; j < 32; j++) {
-			uint32_t image = preimages[i][j];
+			uint32_t image = getBitThetaPreimage(i, j);
 			parity_t parity(image >> 25);
 			slice_t input(image & 0x1ffffff);
 			assert(bitTheta(input, parity) == i);
