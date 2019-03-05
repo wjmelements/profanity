@@ -238,6 +238,7 @@ void Dispatcher::initBegin(Device & d) {
 
 void Dispatcher::initContinue(Device & d) {
 	size_t sizeLeft = m_size - d.m_sizeInitialized;
+	std::cout << "Initializing " << d.m_index << " Remaining: " << sizeLeft << std::endl;
 
 	if (sizeLeft) {
 		cl_event event;
@@ -245,10 +246,10 @@ void Dispatcher::initContinue(Device & d) {
 		const auto resEnqueue = clEnqueueNDRangeKernel(d.m_clQueue, d.m_kernelBegin, 1, &d.m_sizeInitialized, &sizeRun, NULL, 0, NULL, &event);
 		OpenCLException::throwIfError("kernel queueing failed during initilization", resEnqueue);
 
+		d.m_sizeInitialized += sizeRun;
 		const auto resCallback = clSetEventCallback(event, CL_COMPLETE, staticCallback, &d);
 		OpenCLException::throwIfError("failed to set custom callback during initialization", resCallback);
 
-		d.m_sizeInitialized += sizeRun;
 	} else {
 		// Printing one whole string at once helps in avoiding garbled output when executed in parallell
 		const std::string strOutput = "  GPU" + toString(d.m_index) + " initialized";

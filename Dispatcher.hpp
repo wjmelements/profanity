@@ -9,10 +9,10 @@
 
 #if defined(__APPLE__) || defined(__MACOSX)
 #include <OpenCL/cl.h>
-#define clCreateCommandQueueWithProperties clCreateCommandQueue
 #else
 #include <CL/cl.h>
 #endif
+#define clCreateCommandQueueWithProperties clCreateCommandQueue
 
 #include "SpeedSample.hpp"
 #include "CLMemory.hpp"
