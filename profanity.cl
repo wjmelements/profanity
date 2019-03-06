@@ -546,16 +546,8 @@ __kernel void profanity_score_leading(__global mp_number * const pInverse, __glo
 	int score = 0;
 
 	for( int i = 0; i < 20; ++i ) {
-		if( (hash[i] & 0xF0) >> 4 == data1[0] ) {
+		if(( (hash[i] & 0xF0) >> 4 == data1[0] ) && ( (hash[i] & 0x0F) == data1[0] )) {
 			++score;
-		} else {
-			break;
-		}
-			
-		if( (hash[i] & 0x0F) == data1[0] ) {
-			++score;
-		} else {
-			break;
 		}
 	}
 
@@ -568,16 +560,8 @@ __kernel void profanity_minscore_leading(__global mp_number * const pInverse, __
 	int score = 0;
 
 	for( int i = 0; i < 20; ++i ) {
-		if( (hash[i] & 0xF0) >> 4 == data1[0] ) {
+		if(( (hash[i] & 0xF0) >> 4 == data1[0] ) && ( (hash[i] & 0x0F) == data1[0] )) {
 			++score;
-		} else {
-			break;
-		}
-			
-		if( (hash[i] & 0x0F) == data1[0] ) {
-			++score;
-		} else {
-			break;
 		}
 	}
 	if ( score && score >= data1[1] ) {

@@ -89,13 +89,14 @@ class Dispatcher {
 		void initContinue(Device & d);
 
 		void dispatch(Device & d);
+		static void *_dispatch(void *arg);
 		void enqueueKernel(cl_command_queue & clQueue, cl_kernel & clKernel, size_t worksizeGlobal, const size_t worksizeLocal, const bool bSynchronous);
 		void enqueueKernelDevice(Device & d, cl_kernel & clKernel, size_t worksizeGlobal, const bool bSynchronous);
 
 		void handleResult(Device & d);
 		void randomizeSeed(Device & d);
 
-		void onEvent(cl_event event, cl_int status, Device & d);
+		void onEvent(cl_int status, Device & d);
 
 		void printSpeed();
 
